@@ -102,8 +102,7 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/upload', uploadRoutes);
 
-// ── Static Files ──────────────────────────────────────────────
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// ── Static Files (Local Uploads Deprecated in favor of Cloudinary) ──
 
 // ── Root Route ────────────────────────────────────────────────
 app.get('/', (req, res) => {
