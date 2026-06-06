@@ -117,6 +117,12 @@ The `taskController.js` handles the core business logic.
 
 ## 🚀 Installation & Setup
 
+### Prerequisites
+Before you begin, ensure you have the following installed on your machine:
+- [Node.js](https://nodejs.org/en/) (v16 or higher)
+- [MongoDB](https://www.mongodb.com/try/download/community) (Running locally on default port 27017)
+- [Git](https://git-scm.com/)
+
 ### 1. Clone the repository
 ```bash
 git clone <repository-url>
@@ -156,20 +162,25 @@ This script establishes a connection to MongoDB, wipes the collections, and crea
 - **User**: `demo@taskflow.com` (password: `demo123`)
 
 ### 5. Running the Application
-Open two terminal windows.
+Before starting the servers, **ensure your local MongoDB instance is actively running** (you can use MongoDB Compass to verify).
 
-**Terminal 1 (Backend):**
+Open two separate terminal windows.
+
+**Terminal 1 (Backend Server):**
 ```bash
 cd server
 npm run dev
 ```
+*(You should see `✅ MongoDB Connected: localhost` in the console).*
 
-**Terminal 2 (Frontend):**
+**Terminal 2 (Frontend Client):**
 ```bash
 cd client
 npm run dev
 ```
-Navigate to `http://localhost:5173` in your browser. Use the provided demo buttons on the login screen to explore the RBAC implementations.
+
+Finally, open your browser and navigate to: `http://localhost:5173`
+Use the provided demo buttons on the login screen to explore the RBAC implementations!
 
 ---
 
