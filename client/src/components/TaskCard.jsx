@@ -152,7 +152,7 @@ const TaskCard = ({ task, onEdit, onDelete, onToggle }) => {
           {task.attachments.map((att, idx) => (
             <a 
               key={idx} 
-              href={`http://localhost:5000${att.url}`} 
+              href={att.url.startsWith('http') ? att.url : `http://localhost:5000${att.url}`} 
               target="_blank" 
               rel="noreferrer"
               style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--color-primary)', textDecoration: 'none', background: 'var(--color-bg)', padding: '6px 10px', borderRadius: '6px', width: 'fit-content' }}
