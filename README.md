@@ -170,3 +170,26 @@ cd client
 npm run dev
 ```
 Navigate to `http://localhost:5173` in your browser. Use the provided demo buttons on the login screen to explore the RBAC implementations.
+
+---
+
+## 🎮 How to Use the Application
+
+Once both servers are running and you have navigated to `http://localhost:5173`, follow these steps to experience the full workflow:
+
+### 1. The Admin Experience
+- **Login:** On the login screen, click the pink **🛡️ Admin Demo** button to auto-fill the admin credentials, then click **Sign In**.
+- **Dashboard Overview:** You will see the global statistics showing *all* tasks across the entire system.
+- **Create a Task:** Click **Create New Task**. Notice the **Assign To** dropdown menu. You can choose to assign this task to yourself, or to the standard User account. Fill out the details, attach a file if you'd like, and click **Create**.
+- **Manage Tasks:** Because you are an Admin, you will see an **Edit (✏️)** and **Delete (🗑️)** icon on every task card you created. 
+
+### 2. The Standard User Experience
+- **Login:** Sign out of the Admin account (bottom left corner). On the login screen, click the blue **🚀 User Demo** button to auto-fill the standard user credentials, then click **Sign In**.
+- **Dashboard Restrictions:** Notice that the global statistics have changed! You now *only* see numbers for tasks assigned specifically to you.
+- **View Assigned Tasks:** You will see the task the Admin assigned to you. Notice that there is a **Assigned by Admin** badge on it. 
+- **Restricted Actions:** Because an Admin assigned this to you, you do *not* have permission to Edit or Delete the task (the icons are hidden). However, you *can* click the **Complete** button when you finish the work.
+
+### 3. Task Discussions (Replies)
+- As the standard User, click on a Task Card to open the **Task Details Modal**.
+- At the bottom, you will see the **Discussion** section. Type a message (e.g., *"I need more details on this"*), attach an image if you'd like, and send the reply.
+- Log back in as the **Admin**. Open the exact same task, and you will see the User's reply. You can reply back directly in the thread, creating a real-time discussion on that specific task!
