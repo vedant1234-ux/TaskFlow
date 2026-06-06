@@ -77,7 +77,11 @@ const getTasks = asyncHandler(async (req, res) => {
   const skip = (parseInt(page) - 1) * parseInt(limit);
 
   const [tasks, total] = await Promise.all([
-    Task.find(filter).sort(sortOption).skip(skip).limit(parseInt(limit)),
+    Task.find(filter)
+      .populate('user', 'name email avatar')
+      .sort(sortOption)
+      .skip(skip)
+      .limit(parseInt(limit)),
     Task.countDocuments(filter),
   ]);
 

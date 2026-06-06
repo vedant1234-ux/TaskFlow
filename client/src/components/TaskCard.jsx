@@ -116,10 +116,16 @@ const TaskCard = ({ task, onEdit, onDelete, onToggle }) => {
           </span>
         )}
 
-        {/* Assigned By */}
-        {task.assignedBy && (
+        {/* Assigned By / Assigned To */}
+        {task.assignedBy && user?.role !== 'admin' && (
           <span className="badge" style={{ background: '#E0E7FF', color: '#4F46E5' }}>
             Assigned by Admin
+          </span>
+        )}
+        
+        {user?.role === 'admin' && task.user && task.user.name && (
+          <span className="badge" style={{ background: '#E0E7FF', color: '#4F46E5' }}>
+            Assigned to: {task.user.name.split(' ')[0]}
           </span>
         )}
       </div>
