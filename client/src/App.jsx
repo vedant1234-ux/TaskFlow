@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
+import { SocketProvider } from './context/SocketContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import DashboardLayout from './layouts/DashboardLayout';
 import Login from './pages/Login';
@@ -20,7 +21,8 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <SocketProvider>
+        <BrowserRouter>
         {/* Toast Notifications */}
         <Toaster
           position="top-right"
@@ -75,6 +77,7 @@ const App = () => {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
+      </SocketProvider>
     </AuthProvider>
   );
 };

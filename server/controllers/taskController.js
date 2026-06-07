@@ -33,10 +33,18 @@ const createTask = asyncHandler(async (req, res) => {
     assignedBy,
   });
 
+  const populatedTask = await Task.findById(task._id).populate('user', 'name email avatar');
+
+  // Emit real-time event globally (or to specific rooms)
+  const io = req.app.get('io');
+  if (io) {
+    io.emit('task_created', populatedTask);
+  }
+
   res.status(201).json({
     success: true,
     message: 'Task created successfully!',
-    task,
+    task: populatedTask,
   });
 });
 
@@ -159,11 +167,17 @@ const updateTask = asyncHandler(async (req, res) => {
   });
 
   const updatedTask = await task.save();
+  const populatedTask = await Task.findById(updatedTask._id).populate('user', 'name email avatar');
+
+  const io = req.app.get('io');
+  if (io) {
+    io.emit('task_updated', populatedTask);
+  }
 
   res.status(200).json({
     success: true,
     message: 'Task updated successfully!',
-    task: updatedTask,
+    task: populatedTask,
   });
 });
 
@@ -193,6 +207,11 @@ const deleteTask = asyncHandler(async (req, res) => {
   }
 
   await task.deleteOne();
+
+  const io = req.app.get('io');
+  if (io) {
+    io.emit('task_deleted', { taskId: id });
+  }
 
   res.status(200).json({
     success: true,
@@ -228,11 +247,17 @@ const toggleTask = asyncHandler(async (req, res) => {
 
   task.status = task.status === 'completed' ? 'pending' : 'completed';
   const updatedTask = await task.save();
+  const populatedTask = await Task.findById(updatedTask._id).populate('user', 'name email avatar');
+
+  const io = req.app.get('io');
+  if (io) {
+    io.emit('task_updated', populatedTask);
+  }
 
   res.status(200).json({
     success: true,
-    message: `Task marked as ${updatedTask.status}!`,
-    task: updatedTask,
+    message: `Task marked as ${populatedTask.status}!`,
+    task: populatedTask,
   });
 });
 
@@ -317,11 +342,17 @@ const replyTask = asyncHandler(async (req, res) => {
   });
 
   const updatedTask = await task.save();
+  const populatedTask = await Task.findById(updatedTask._id).populate('user', 'name email avatar');
+
+  const io = req.app.get('io');
+  if (io) {
+    io.emit('task_updated', populatedTask);
+  }
 
   res.status(200).json({
     success: true,
     message: 'Reply added!',
-    task: updatedTask,
+    task: populatedTask,
   });
 });
 

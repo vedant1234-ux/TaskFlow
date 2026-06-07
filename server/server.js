@@ -4,6 +4,8 @@
  */
 
 const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -21,8 +23,37 @@ const uploadRoutes = require('./routes/uploadRoutes');
 const path = require('path');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
-// ── Initialize Express App ────────────────────────────────────
+// ── Initialize Express App & Socket.IO ────────────────────────
 const app = express();
+const httpServer = http.createServer(app);
+
+const io = new Server(httpServer, {
+  cors: {
+    origin: [
+      process.env.CLIENT_URL || 'http://localhost:5173',
+      'http://localhost:3000',
+    ],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    credentials: true,
+  }
+});
+
+// Make io accessible to routers
+app.set('io', io);
+
+io.on('connection', (socket) => {
+  console.log(`🔌 Client connected: ${socket.id}`);
+  
+  // Optionally, clients can join a room using their user ID to receive targeted updates
+  socket.on('join_user_room', (userId) => {
+    socket.join(`user_${userId}`);
+    console.log(`🔌 Client ${socket.id} joined room: user_${userId}`);
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`🔌 Client disconnected: ${socket.id}`);
+  });
+});
 const PORT = process.env.PORT || 5000;
 
 // ── Connect to MongoDB ────────────────────────────────────────
@@ -120,7 +151,7 @@ app.use(notFound);
 app.use(errorHandler);
 
 // ── Start Server ──────────────────────────────────────────────
-const server = app.listen(PORT, () => {
+const server = httpServer.listen(PORT, () => {
   console.log('');
   console.log('🚀 ═══════════════════════════════════════');
   console.log(`   TaskFlow API Server`);

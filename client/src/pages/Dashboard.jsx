@@ -12,6 +12,7 @@ import TaskModal from '../components/TaskModal';
 import EmptyState from '../components/EmptyState';
 import { SkeletonCard } from '../components/Loader';
 import toast from 'react-hot-toast';
+import { useSocket } from '../context/SocketContext';
 
 // ── Animated Counter ──────────────────────────────
 const AnimatedCounter = ({ value }) => {
@@ -101,6 +102,8 @@ const Dashboard = ({ onStatsUpdate }) => {
     toggleTask,
   } = useTasks();
 
+  const socket = useSocket();
+
   const [editingTask, setEditingTask] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
   const [search, setSearch] = useState('');
@@ -123,6 +126,27 @@ const Dashboard = ({ onStatsUpdate }) => {
   useEffect(() => {
     if (onStatsUpdate) onStatsUpdate(stats);
   }, [stats]);
+
+  // ── Real-Time Socket Updates ───────────────────
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleTaskChange = () => {
+      console.log('Real-time event received, refreshing data...');
+      // Simple strategy: refetch on any event to ensure consistency
+      loadAll({ sort });
+    };
+
+    socket.on('task_created', handleTaskChange);
+    socket.on('task_updated', handleTaskChange);
+    socket.on('task_deleted', handleTaskChange);
+
+    return () => {
+      socket.off('task_created', handleTaskChange);
+      socket.off('task_updated', handleTaskChange);
+      socket.off('task_deleted', handleTaskChange);
+    };
+  }, [socket, loadAll, sort]);
 
   // ── Debounced Search + Filter ──────────────────
   useEffect(() => {
